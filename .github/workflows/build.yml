@@ -1,0 +1,24 @@
+name: Build Windows payload_dumper EXE
+on:
+  workflow_dispatch: # 手动点击触发编译
+
+jobs:
+  build-win:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-msvc
+
+      - name: Build release binary
+        run: cargo build --release --target x86_64-pc-windows-msvc
+
+      - name: Upload EXE as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: payload_dumper-windows
+          path: target/x86_64-pc-windows-msvc/release/payload_dumper.exe
